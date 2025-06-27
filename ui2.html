@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Domain Intelligence Analyzer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">🧠 Domain Intel</div>
+                <div class="tagline">AI-Powered Website Analysis</div>
+            </div>
+
+            <!-- Setup Section -->
+            <div class="setup-section">
+                <div class="section-title">🔧 Setup</div>
+                <div class="status-indicator">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">Not Connected</span>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Groq API Key</label>
+                    <input type="password" id="apiKey" class="input-field" placeholder="Enter your Groq API key">
+                </div>
+                <button id="initializeBtn" class="btn btn-primary btn-block">🚀 Initialize Analyzer</button>
+            </div>
+
+            <!-- Domain Analysis Section -->
+            <div class="controls-section">
+                <div class="section-title">🌐 Website/URLs Analysis</div>
+                <div class="input-group">
+                    <label class="input-label">Analysis Mode</label>
+                    <select id="modeSelect" class="input-field">
+                        <option value="domain">Single Domain</option>
+                        <option value="urls">Multiple URLs</option>
+                        <option value="upload">Upload HTML File</option>
+                    </select>
+                </div>
+
+                <div class="input-group" id="domainInputGroup">
+                    <label class="input-label">Website URL</label>
+                    <input type="text" id="domainInput" class="input-field" placeholder="https://example.com" disabled>
+                </div>
+
+                <div class="input-group" id="urlsInputGroup" style="display:none">
+                    <label class="input-label">Website URL(s)</label>
+                    <textarea id="urlInput" class="input-field" rows="4" placeholder="Enter one or more URLs, separated by newlines" disabled></textarea>
+                </div>
+
+                <button id="analyzeBtn" class="btn btn-primary btn-block" disabled>🔍 Analyze</button>
+                <button id="syncBtn" class="btn btn-secondary btn-block" disabled style="margin-top: 8px;">🔄 Sync Updates</button>
+                <button id="clearChatBtn" class="btn btn-secondary btn-block" disabled style="margin-top: 8px;">🗑️ Clear Chat</button>
+
+                <!-- Upload HTML Form (Initially hidden, shown based on mode) -->
+                <form id="uploadForm" enctype="multipart/form-data" style="margin-top: 16px; display: none;">
+                    <input type="file" name="file" accept=".html" required class="input-field" style="margin-bottom: 12px;" />
+                    <input type="hidden" name="session_id" id="uploadSessionId" />
+                    <button type="submit" class="btn btn-primary btn-block">📤 Upload & Analyze</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Enhanced Domain Intelligence Analyzer</h1>
+                <p>Analyze websites with AI-powered insights and chat with your data</p>
+            </div>
+
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="welcome-screen">
+                <div class="welcome-icon">🤖</div>
+                <h2 class="welcome-title">Welcome to Domain Intel</h2>
+                <p class="welcome-subtitle">
+                    Discover powerful insights about any website through AI-powered analysis. 
+                    Get started by entering your Groq API key and analyzing your first domain.
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <div class="feature-title">Deep Analysis</div>
+                        <div class="feature-desc">Crawl and analyze entire websites for comprehensive insights</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <div class="feature-title">AI Chat</div>
+                        <div class="feature-desc">Ask questions about the analyzed website and get intelligent answers</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-title">Business Intel</div>
+                        <div class="feature-desc">Extract business information, services, and competitive insights</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <div class="feature-title">Live Sync</div>
+                        <div class="feature-desc">Keep your analysis up-to-date with website changes</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Chat Container -->
+            <div id="chatContainer" class="chat-container" style="display: none;">
+                <div id="chatMessages" class="chat-messages scrollbar-thin">
+                    <!-- Messages will be added here -->
+                </div>
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <span>AI is thinking...</span>
+                </div>
+                <div class="chat-input-container">
+                    <textarea id="chatInput" class="chat-input" placeholder="Ask me anything about the analyzed website..." disabled></textarea>
+                    <button id="sendBtn" class="btn btn-primary" disabled>➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification" class="notification"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>
